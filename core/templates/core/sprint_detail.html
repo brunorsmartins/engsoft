@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Detalhes da Sprint{% endblock %}
+
+{% block content %}
+<h1 class="my-4">{{ sprint.nome }}</h1>
+<p>{{ sprint.descricao }}</p>
+
+<h2 class="mt-5">Editar Notas</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" name="update" class="btn btn-primary mt-2">Salvar Notas</button>
+</form>
+
+<h2 class="mt-5 text-danger">Deletar Sprint</h2>
+<form method="POST" onsubmit="return confirm('Você tem certeza que deseja deletar esta Sprint?');">
+    {% csrf_token %}
+    <button type="submit" name="delete" class="btn btn-danger mt-2">Deletar Sprint</button>
+</form>
+
+<a href="{% url 'sprint_list' %}" class="btn btn-secondary mt-3">Voltar à Lista de Sprints</a>
+{% endblock %}

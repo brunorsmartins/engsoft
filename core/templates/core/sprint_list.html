@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Lista de Sprints{% endblock %}
+
+{% block content %}
+<h1 class="my-4">Lista de Sprints</h1>
+
+<a href="{% url 'sprint_create' %}" class="btn btn-success mb-4">Criar Nova Sprint</a>
+
+<ul class="list-group mb-4">
+    {% for sprint in sprints %}
+        <li class="list-group-item">
+            <a href="{% url 'sprint_detail' sprint.pk %}">{{ sprint.nome }}</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

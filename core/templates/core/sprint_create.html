@@ -1,0 +1,13 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Criar Nova Sprint{% endblock %}
+
+{% block content %}
+<h1 class="my-4">Criar Nova Sprint</h1>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Criar Sprint</button>
+</form>
+<a href="{% url 'sprint_list' %}" class="btn btn-secondary mt-3">Voltar à Lista de Sprints</a>  <!-- Corrigido o link -->
+{% endblock %}
