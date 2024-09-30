@@ -8,15 +8,15 @@ def sprint_list(request):
         form = SprintCreateForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('sprint_list')  # Use redirect para evitar re-submissão de formulário
+            return redirect('sprint_list') 
     else:
-        form = SprintCreateForm()  # Substitua SprintForm por SprintCreateForm aqui
+        form = SprintCreateForm()  
 
     return render(request, 'core/sprint_list.html', {'sprints': sprints, 'form': form})
 
 def sprint_detail(request, pk):
     sprint = get_object_or_404(Sprint, pk=pk)
-    dailys = sprint.daily_set.all()  # Pegar todas as Dailys associadas à Sprint
+    dailys = sprint.daily_set.all()  
 
     # Lidar com a criação de uma nova Daily
     if request.method == 'POST':
@@ -44,7 +44,7 @@ def sprint_create(request):
         form = SprintCreateForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('sprint_list')  # Redirecionar após criar a sprint
+            return redirect('sprint_list') 
     else:
         form = SprintCreateForm()
     return render(request, 'core/sprint_create.html', {'form': form})
