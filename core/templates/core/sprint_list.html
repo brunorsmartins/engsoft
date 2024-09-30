@@ -12,6 +12,8 @@
         <li class="list-group-item">
             <a href="{% url 'sprint_detail' sprint.pk %}">{{ sprint.nome }}</a>
         </li>
+    {% empty %}
+        <li class="list-group-item">Nenhuma Sprint encontrada.</li>
     {% endfor %}
 </ul>
 {% endblock %}

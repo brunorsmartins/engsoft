@@ -3,21 +3,93 @@
 {% block title %}Detalhes da Sprint{% endblock %}
 
 {% block content %}
-<h1 class="my-4">{{ sprint.nome }}</h1>
-<p>{{ sprint.descricao }}</p>
+<div class="container mt-4">
+    <h1 class="mb-4">{{ sprint.nome }}</h1>
 
-<h2 class="mt-5">Editar Notas</h2>
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" name="update" class="btn btn-primary mt-2">Salvar Notas</button>
-</form>
+    <!-- Informações Principais da Sprint -->
+    <div class="row">
+        <div class="col-md-8">
+            <p><strong>Descrição:</strong> {{ sprint.descricao }}</p>
+            <p><strong>Data de Início:</strong> {{ sprint.data_inicio|date:"d/m/Y" }}</p>
+            <p><strong>Data de Fim:</strong> {{ sprint.data_fim|date:"d/m/Y" }}</p>
+            <p><strong>Gerente:</strong> {{ sprint.gerente.username }}</p>
+        </div>
+    </div>
 
-<h2 class="mt-5 text-danger">Deletar Sprint</h2>
-<form method="POST" onsubmit="return confirm('Você tem certeza que deseja deletar esta Sprint?');">
-    {% csrf_token %}
-    <button type="submit" name="delete" class="btn btn-danger mt-2">Deletar Sprint</button>
-</form>
+    <!-- Formulário para Notas da Sprint -->
+    <h3 class="my-4">Notas da Sprint</h3>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group mb-3">
+            {{ form.atividades.label_tag }} 
+            {{ form.atividades }}
+        </div>
+        <div class="form-group mb-3">
+            {{ form.equipe.label_tag }} 
+            {{ form.equipe }}
+        </div>
+        <div class="form-group mb-3">
+            {{ form.comunicacao.label_tag }} 
+            {{ form.comunicacao }}
+        </div>
+        <div class="form-group mb-3">
+            {{ form.entregas.label_tag }} 
+            {{ form.entregas }}
+        </div>
+        <button type="submit" class="btn btn-primary">Salvar Notas</button>
+    </form>
 
-<a href="{% url 'sprint_list' %}" class="btn btn-secondary mt-3">Voltar à Lista de Sprints</a>
+    <!-- Formulário para Adicionar uma Nova Daily -->
+    <h3 class="my-4">Adicionar Nova Daily</h3>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group mb-3">
+            {{ daily_form.descricao.label_tag }} 
+            {{ daily_form.descricao }}
+        </div>
+        <div class="form-group mb-3">
+            {{ daily_form.data.label_tag }} 
+            {{ daily_form.data }}
+        </div>
+        <div class="form-group mb-3">
+            {{ daily_form.nota.label_tag }} 
+            {{ daily_form.nota }}
+        </div>
+        <button type="submit" class="btn btn-primary">Adicionar Daily</button>
+    </form>
+
+    <!-- Lista de Dailys -->
+    <h3 class="my-4">Dailys</h3>
+    <ul class="list-group mb-4">
+        {% for daily in dailys %}
+            <li class="list-group-item">
+                <strong>Data:</strong> {{ daily.data|date:"d/m/Y" }}<br>
+                <strong>Descrição:</strong> {{ daily.descricao }}<br>
+                <strong>Nota:</strong> {{ daily.nota }}/100
+            </li>
+        {% empty %}
+            <li class="list-group-item">Nenhuma Daily adicionada ainda.</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Exibir a Média das Notas das Dailys -->
+    <h3 class="my-4">Média das Notas</h3>
+    <p>A média das notas das Dailys desta Sprint é: 
+        <strong>{{ media_notas|floatformat:2 }}/100</strong>
+    </p>
+
+    <!-- Exibir a Média das Notas da Sprint -->
+    <h3 class="my-4">Média Geral da Sprint</h3>
+    <p>A média das notas da Sprint é: 
+        <strong>{{ sprint.calcular_media|floatformat:2 }}/100</strong>
+    </p>
+
+    <!-- Ações de Deletar Sprint e Voltar -->
+    <h3 class="my-4">Ações</h3>
+    <form method="POST" onsubmit="return confirm('Você tem certeza que deseja deletar esta Sprint?');">
+        {% csrf_token %}
+        <button type="submit" name="delete" class="btn btn-danger">Deletar Sprint</button>
+        <a href="{% url 'sprint_list' %}" class="btn btn-secondary">Voltar à Lista de Sprints</a>
+    </form>
+</div>
 {% endblock %}

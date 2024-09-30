@@ -3,11 +3,32 @@
 {% block title %}Criar Nova Sprint{% endblock %}
 
 {% block content %}
-<h1 class="my-4">Criar Nova Sprint</h1>
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Criar Sprint</button>
-</form>
-<a href="{% url 'sprint_list' %}" class="btn btn-secondary mt-3">Voltar à Lista de Sprints</a>  <!-- Corrigido o link -->
+<div class="container mt-4">
+    <h1 class="my-4">Criar Nova Sprint</h1>
+    <form method="POST" class="needs-validation" novalidate>
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ form.nome.label_tag }} 
+            {{ form.nome }}
+        </div>
+        <div class="mb-3">
+            {{ form.descricao.label_tag }} 
+            {{ form.descricao }}
+        </div>
+        <div class="mb-3">
+            {{ form.data_inicio.label_tag }} 
+            {{ form.data_inicio }}
+        </div>
+        <div class="mb-3">
+            {{ form.data_fim.label_tag }} 
+            {{ form.data_fim }}
+        </div>
+        <div class="mb-3">
+            {{ form.gerente.label_tag }} 
+            {{ form.gerente }}
+        </div>
+        <button type="submit" class="btn btn-primary">Criar Sprint</button>
+    </form>
+    <a href="{% url 'sprint_list' %}" class="btn btn-secondary mt-3">Voltar à Lista de Sprints</a>
+</div>
 {% endblock %}

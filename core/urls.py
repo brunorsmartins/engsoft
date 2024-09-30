@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     path('sprints/', views.sprint_list, name='sprint_list'),
+    path('', views.home_redirect, name='home'),
     path('sprints/<int:pk>/', views.sprint_detail, name='sprint_detail'),
     path('sprints/create/', views.sprint_create, name='sprint_create'),
 
