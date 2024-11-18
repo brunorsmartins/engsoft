@@ -3,17 +3,20 @@
 {% block title %}Lista de Sprints{% endblock %}
 
 {% block content %}
-<h1 class="my-4">Lista de Sprints</h1>
+<h1 class="mb-4">Lista de Sprints</h1>
 
-<a href="{% url 'sprint_create' %}" class="btn btn-success mb-4">Criar Nova Sprint</a>
+<a href="{% url 'sprint_create' %}" class="btn btn-success mb-3">Criar Nova Sprint</a>
 
-<ul class="list-group mb-4">
+<div class="list-group">
     {% for sprint in sprints %}
-        <li class="list-group-item">
-            <a href="{% url 'sprint_detail' sprint.pk %}">{{ sprint.nome }}</a>
-        </li>
+        <a href="{% url 'sprint_detail' sprint.pk %}" class="list-group-item list-group-item-action">
+            <strong>{{ sprint.nome }}</strong> - 
+            {{ sprint.data_inicio|date:"d/m/Y" }} a {{ sprint.data_fim|date:"d/m/Y" }}
+        </a>
     {% empty %}
-        <li class="list-group-item">Nenhuma Sprint encontrada.</li>
+        <div class="alert alert-warning" role="alert">
+            Nenhuma Sprint encontrada.
+        </div>
     {% endfor %}
-</ul>
+</div>
 {% endblock %}
