@@ -3,93 +3,70 @@
 {% block title %}Detalhes da Sprint{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h1 class="mb-4">{{ sprint.nome }}</h1>
-
-    <!-- Informações Principais da Sprint -->
-    <div class="row">
-        <div class="col-md-8">
-            <p><strong>Descrição:</strong> {{ sprint.descricao }}</p>
-            <p><strong>Data de Início:</strong> {{ sprint.data_inicio|date:"d/m/Y" }}</p>
-            <p><strong>Data de Fim:</strong> {{ sprint.data_fim|date:"d/m/Y" }}</p>
-            <p><strong>Gerente:</strong> {{ sprint.gerente.username }}</p>
-        </div>
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        Detalhes da Sprint: {{ sprint.nome }}
     </div>
+    <div class="card-body">
+        <p><strong>Descrição:</strong> {{ sprint.descricao }}</p>
+        <p><strong>Data de Início:</strong> {{ sprint.data_inicio|date:"d/m/Y" }}</p>
+        <p><strong>Data de Fim:</strong> {{ sprint.data_fim|date:"d/m/Y" }}</p>
+        <p><strong>Gerente:</strong> {{ sprint.gerente.username }}</p>
+    </div>
+</div>
 
-    <!-- Formulário para Notas da Sprint -->
-    <h3 class="my-4">Notas da Sprint</h3>
-    <form method="POST">
+<div class="mt-4">
+    <h4>Adicionar Daily</h4>
+    <form method="POST" class="row g-3">
         {% csrf_token %}
-        <div class="form-group mb-3">
-            {{ form.atividades.label_tag }} 
-            {{ form.atividades }}
+        <div class="col-md-6">
+            {{ daily_form.descricao.label_tag }}
+            {{ daily_form.descricao|add_class:"form-control" }}
         </div>
-        <div class="form-group mb-3">
-            {{ form.equipe.label_tag }} 
-            {{ form.equipe }}
+        <div class="col-md-3">
+            {{ daily_form.data.label_tag }}
+            {{ daily_form.data|add_class:"form-control" }}
         </div>
-        <div class="form-group mb-3">
-            {{ form.comunicacao.label_tag }} 
-            {{ form.comunicacao }}
+        <div class="col-md-3">
+            {{ daily_form.nota.label_tag }}
+            {{ daily_form.nota|add_class:"form-control" }}
         </div>
-        <div class="form-group mb-3">
-            {{ form.entregas.label_tag }} 
-            {{ form.entregas }}
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-primary">Adicionar Daily</button>
         </div>
-        <button type="submit" class="btn btn-primary">Salvar Notas</button>
     </form>
+</div>
 
-    <!-- Formulário para Adicionar uma Nova Daily -->
-    <h3 class="my-4">Adicionar Nova Daily</h3>
-    <form method="POST">
-        {% csrf_token %}
-        <div class="form-group mb-3">
-            {{ daily_form.descricao.label_tag }} 
-            {{ daily_form.descricao }}
-        </div>
-        <div class="form-group mb-3">
-            {{ daily_form.data.label_tag }} 
-            {{ daily_form.data }}
-        </div>
-        <div class="form-group mb-3">
-            {{ daily_form.nota.label_tag }} 
-            {{ daily_form.nota }}
-        </div>
-        <button type="submit" class="btn btn-primary">Adicionar Daily</button>
-    </form>
+<div class="mt-4">
+    <h4>Notas da Sprint</h4>
+    <p>A média das notas das Dailys: 
+        <strong>{{ media_notas|default:"N/A"|floatformat:2 }}/100</strong>
+    </p>
+    <p>Média Geral da Sprint: 
+        <strong>{{ sprint.calcular_media|default:"N/A"|floatformat:2 }}/100</strong>
+    </p>
+</div>
 
-    <!-- Lista de Dailys -->
-    <h3 class="my-4">Dailys</h3>
-    <ul class="list-group mb-4">
+<div class="mt-4">
+    <h4>Dailys</h4>
+    <ul class="list-group">
         {% for daily in dailys %}
             <li class="list-group-item">
-                <strong>Data:</strong> {{ daily.data|date:"d/m/Y" }}<br>
-                <strong>Descrição:</strong> {{ daily.descricao }}<br>
-                <strong>Nota:</strong> {{ daily.nota }}/100
+                <strong>{{ daily.data|date:"d/m/Y" }}</strong>: {{ daily.descricao }} 
+                (Nota: {{ daily.nota }})
             </li>
         {% empty %}
-            <li class="list-group-item">Nenhuma Daily adicionada ainda.</li>
+            <li class="list-group-item">Nenhuma Daily registrada.</li>
         {% endfor %}
     </ul>
+</div>
 
-    <!-- Exibir a Média das Notas das Dailys -->
-    <h3 class="my-4">Média das Notas</h3>
-    <p>A média das notas das Dailys desta Sprint é: 
-        <strong>{{ media_notas|floatformat:2 }}/100</strong>
-    </p>
-
-    <!-- Exibir a Média das Notas da Sprint -->
-    <h3 class="my-4">Média Geral da Sprint</h3>
-    <p>A média das notas da Sprint é: 
-        <strong>{{ sprint.calcular_media|floatformat:2 }}/100</strong>
-    </p>
-
-    <!-- Ações de Deletar Sprint e Voltar -->
-    <h3 class="my-4">Ações</h3>
-    <form method="POST" onsubmit="return confirm('Você tem certeza que deseja deletar esta Sprint?');">
+<div class="mt-4">
+    <form method="POST" onsubmit="return confirm('Tem certeza que deseja deletar esta Sprint?');">
         {% csrf_token %}
         <button type="submit" name="delete" class="btn btn-danger">Deletar Sprint</button>
-        <a href="{% url 'sprint_list' %}" class="btn btn-secondary">Voltar à Lista de Sprints</a>
+        <a href="{% url 'sprint_list' %}" class="btn btn-secondary">Voltar</a>
     </form>
 </div>
 {% endblock %}
+
